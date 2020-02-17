@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Publications
 {
@@ -15,8 +15,7 @@ namespace Publications
             {
                 if (!(isbn.Length == 10 | isbn.Length == 13))
                     throw new ArgumentException("The ISBN must be a 10 or 13 character numeric string.");
-                ulong nISBN = 0;
-                if (!UInt64.TryParse(isbn, out nISBN))
+                if (!UInt64.TryParse(isbn, out _))
                     throw new ArgumentException("The ISBN can consist of numeric characters only");
             }
             ISBN = isbn;
@@ -48,11 +47,11 @@ namespace Publications
 
         public override bool Equals(object obj)
         {
-            Book book = obj as Book;
-            if (book == null)
-                return false;
-            else
-                return ISBN == book.ISBN;
+            return obj switch
+            {
+                Book b => b.ISBN == ISBN,
+                _ => false,
+            };
         }
 
         public override int GetHashCode() => ISBN.GetHashCode();
